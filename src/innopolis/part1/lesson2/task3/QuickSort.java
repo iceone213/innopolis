@@ -1,59 +1,63 @@
 package innopolis.part1.lesson2.task3;
 
+import innopolis.part1.lesson2.task2.Logger;
+
 /**
  * QuickSort
  *
  * @author Stanislav_Klevtsov
  */
-public class QuickSort implements PersonSort {
+public class QuickSort implements ObjectSort {
 
     /**
      * Quick sort
-     * @param personArr Person array to sort
+     *
+     * @param objArr Object array to sort
      */
-    public void sort (Person[] personArr) {
+    public void sort(Comparable[] objArr) {
         Logger.d("---Array BEFORE Quick Sort---");
-        Logger.d(personArr);
+        Logger.d(objArr);
 
-        sort(personArr, 0, personArr.length-1);
+        sort(objArr, 0, objArr.length - 1);
 
         Logger.d("---Array AFTER Quick Sort---");
-        Logger.d(personArr);
+        Logger.d(objArr);
     }
 
     /**
      * Quick sort
-     * @param personArr Person array to sort
-     * @param start Start index
-     * @param end End index
+     *
+     * @param objArr Object array to sort
+     * @param start     Start index
+     * @param end       End index
      */
-    public void sort(Person[] personArr, int start, int end){
+    public void sort(Comparable[] objArr, int start, int end) {
 
-        int partition = partition(personArr, start, end);
+        int partition = partition(objArr, start, end);
 
-        if(partition-1>start) {
-            sort(personArr, start, partition - 1);
+        if (partition - 1 > start) {
+            sort(objArr, start, partition - 1);
         }
-        if(partition+1<end) {
-            sort(personArr, partition + 1, end);
+        if (partition + 1 < end) {
+            sort(objArr, partition + 1, end);
         }
     }
 
-    public int partition(Person[] personArr, int start, int end){
-        Person pivot = personArr[end];
+    public int partition(Comparable[] objArr, int start, int end) {
+        Comparable pivot = objArr[end];
 
-        for(int i=start; i<end; i++){
-            if(personArr[i].compareTo(pivot) < 0){
-                Person temp= personArr[start];
-                personArr[start]=personArr[i];
-                personArr[i]=temp;
+        for (int i = start; i < end; i++) {
+            if (objArr[i].compareTo(pivot) < 0) {
+                Comparable temp = objArr[start];
+                objArr[start] = objArr[i];
+                objArr[i] = temp;
                 start++;
             }
         }
 
-        Person temp = personArr[start];
-        personArr[start] = pivot;
-        personArr[end] = temp;
+        Comparable temp = objArr[start];
+        objArr[start] = pivot;
+        objArr[end] = temp;
 
         return start;
     }

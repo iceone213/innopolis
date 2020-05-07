@@ -1,5 +1,7 @@
 package innopolis.part1.lesson2.task3;
 
+import innopolis.part1.lesson2.task2.Logger;
+
 /**
  * Person
  *
@@ -81,7 +83,7 @@ public class Person implements Comparable<Person> {
         try {
             throw new MyException();
         } catch (MyException e) {
-            Logger.e("MyException " + e.getMessage());
+            Logger.exceptionDebug("MyException " + e.getMessage());
         }
     }
 

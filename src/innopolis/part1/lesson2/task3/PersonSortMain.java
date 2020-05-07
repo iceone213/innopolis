@@ -1,5 +1,7 @@
 package innopolis.part1.lesson2.task3;
 
+import innopolis.part1.lesson2.task2.Logger;
+
 /**
  * PersonSortMain
  *
@@ -11,15 +13,15 @@ public class PersonSortMain {
         //Set true to view personArr before & after sort
         //Set exceptionDebug true to view exceptions
         Logger.debug = false;
-        Logger.exceptionDebug = true;
+        Logger.exceptionDebug = false;
 
-        int personCount = 10000;
+        int personCount = 1000;
         Logger.p("Person array size = " + personCount);
 
         //init
         PersonGenerator generator = new PersonGenerator(personCount);
-        BubbleSort bubbleSort = new BubbleSort();
-        QuickSort quickSort = new QuickSort();
+        ObjectSort bubbleSort = new BubbleSort();
+        ObjectSort quickSort = new QuickSort();
 
         //Generate Person array
         Person[] personArr = generator.generateRandomPersonArr();

@@ -53,7 +53,7 @@ public class RandomNumbersGenerator {
                     if (randomNumbersArr[i] < 0)
                         throw new IllegalArgumentException();
                 } catch (IllegalArgumentException e) {
-                    Logger.e(
+                    Logger.exceptionDebug(
                             "IllegalArgumentException. " + randomNumbersArr[i] + " don't have square root"
                     );
                     continue;

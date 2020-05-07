@@ -1,7 +1,6 @@
 package innopolis.part1.lesson3.box;
 
-import innopolis.part1.lesson2.task1.MyException;
-import innopolis.part1.lesson3.Logger;
+import innopolis.part1.lesson2.task2.Logger;
 
 import java.util.*;
 

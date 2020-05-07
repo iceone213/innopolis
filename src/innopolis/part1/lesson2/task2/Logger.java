@@ -12,19 +12,27 @@ public class Logger {
 
     /**
      * Print
-     * @param str string to log
+     * @param obj string to log
      */
-    public static void p(String str) {
-        System.out.println(str);
+    public static void p(Object obj) {
+        System.out.println(obj);
     }
 
     /**
      * Print err
-     * @param str
+     * @param obj
      */
-    public static void e(String str) {
+    public static void e(Object obj) {
+        System.err.println(obj);
+    }
+
+    /**
+     * Debug print err
+     * @param obj
+     */
+    public static void exceptionDebug(Object obj) {
         if (exceptionDebug)
-            System.err.println(str);
+            System.err.println(obj);
     }
 
     /**
@@ -37,16 +45,16 @@ public class Logger {
 
     /**
      * Debug print
-     * @param str
+     * @param obj
      */
-    public static void d(String str) {
+    public static void d(Object obj) {
         if (debug)
-            System.out.println(str);
+            System.out.println(obj);
     }
 
     /**
      * Debug print object array
-     * @param str
+     * @param objects
      */
     public static void d(Object[] objects) {
         if (debug)
@@ -63,10 +71,10 @@ public class Logger {
                 System.out.print(objects[i].toString() + "\n");
             }
 
-            innopolis.part1.lesson2.task3.Logger.p("");
+            p("");
             return;
         }
 
-        innopolis.part1.lesson2.task3.Logger.p("Array is empty or null!");
+        p("Array is empty or null!");
     }
 }

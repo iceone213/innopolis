@@ -1,46 +1,38 @@
 package innopolis.part1.lesson2.task3;
 
+import innopolis.part1.lesson2.task2.Logger;
+
 /**
  * BubbleSort
  *
  * @author Stanislav_Klevtsov
  */
-public class BubbleSort implements PersonSort {
+public class BubbleSort implements ObjectSort {
 
     /**
      * Bubble sort
-     * @param personArr Person array to sort
+     * @param objArr Person array to sort
      */
-    public void sort(Person[] personArr) {
-        int n = personArr.length;
-        Person temp = new Person();
+    public void sort(Comparable[] objArr) {
+        int n = objArr.length;
 
         Logger.d("---Array BEFORE Bubble Sort---");
-        Logger.d(personArr);
+        Logger.d(objArr);
 
         for(int i=0; i < n; i++) {
             for(int j=1; j < (n-i); j++) {
-                if (personArr[j-1].compareTo(personArr[j]) > 0) {
-                    swap(temp, personArr[j-1], personArr[j]);
+                if (objArr[j-1].compareTo(objArr[j]) > 0) {
+//                    swap(temp, objArr[j-1], objArr[j]);
+                    Comparable temp = objArr[j-1];
+                    objArr[j-1] = objArr[j];
+                    objArr[j] = temp;
                 }
             }
         }
 
         Logger.d("---Array AFTER Bubble Sort---");
-        Logger.d(personArr);
+        Logger.d(objArr);
 
-    }
-
-    /**
-     * Swap person
-     * @param temp temporary obj
-     * @param p1 person #1
-     * @param p2 person #2
-     */
-    private void swap(Person temp, Person p1, Person p2) {
-        temp.setPerson(p1);
-        p1.setPerson(p2);
-        p2.setPerson(temp);
     }
 
 }

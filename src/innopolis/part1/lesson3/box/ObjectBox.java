@@ -1,6 +1,6 @@
 package innopolis.part1.lesson3.box;
 
-import innopolis.part1.lesson3.Logger;
+import innopolis.part1.lesson2.task2.Logger;
 
 import java.util.*;
 
@@ -60,7 +60,7 @@ public class ObjectBox {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        objSet.forEach(x -> builder.append(x.toString() + "\n"));
+        objSet.forEach(x -> builder.append(x.toString()).append("\n"));
         builder.setLength(builder.length() - 1);
 
         return builder.toString();

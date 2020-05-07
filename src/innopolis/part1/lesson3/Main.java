@@ -1,7 +1,7 @@
 package innopolis.part1.lesson3;
 
+import innopolis.part1.lesson2.task2.Logger;
 import innopolis.part1.lesson3.box.MathBox;
-import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
 
