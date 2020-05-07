@@ -9,6 +9,13 @@ import innopolis.part1.lesson2.task2.Logger;
  */
 public class QuickSort implements ObjectSort {
 
+    private static final QuickSort instance = new QuickSort();
+
+    public static QuickSort getInstance() { return instance; }
+
+    private QuickSort() {
+    }
+
     /**
      * Quick sort
      *

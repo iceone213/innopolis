@@ -20,8 +20,8 @@ public class PersonSortMain {
 
         //init
         PersonGenerator generator = new PersonGenerator(personCount);
-        ObjectSort bubbleSort = new BubbleSort();
-        ObjectSort quickSort = new QuickSort();
+        ObjectSort bubbleSort = BubbleSort.getInstance();
+        ObjectSort quickSort = QuickSort.getInstance();
 
         //Generate Person array
         Person[] personArr = generator.generateRandomPersonArr();
