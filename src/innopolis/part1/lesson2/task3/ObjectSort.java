@@ -1,13 +1,12 @@
 package innopolis.part1.lesson2.task3;
 
-import java.util.ArrayList;
-
 /**
- * PersonSort
+ * ObjectSort
  *
  * @author Stanislav_Klevtsov
  */
-public interface ObjectSort<T extends Comparable> {
+public interface ObjectSort<T extends Comparable<T>> {
 
     void sort(T[] objArr);
+
 }

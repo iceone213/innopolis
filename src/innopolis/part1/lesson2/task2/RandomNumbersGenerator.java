@@ -1,5 +1,6 @@
 package innopolis.part1.lesson2.task2;
 
+import javax.rmi.CORBA.Util;
 import java.util.Random;
 
 /**
@@ -31,7 +32,7 @@ public class RandomNumbersGenerator {
      */
     public void generateNewRandomNumbersArr() {
         for (int i = 0; i < randomNumbersArr.length; i++) {
-            randomNumbersArr[i] = getRandomNumberInRange(nminValue, nmaxValue);
+            randomNumbersArr[i] = Utils.getRandomNumberInRange(nminValue, nmaxValue);
         }
 
         Logger.p("Generated new randomNumbersArr");
@@ -72,23 +73,5 @@ public class RandomNumbersGenerator {
 
         Logger.p("randomNumbersArr is empty or null! Please generate new randomNumbersArr first");
     }
-
-    /**
-     * Generates a random integer between min (inclusive) and max (inclusive).
-     *
-     * @param min min value bound
-     * @param max max value bound
-     * @return random integer between min (inclusive) and max (inclusive).
-     */
-    private static int getRandomNumberInRange(int min, int max) {
-
-        if (min >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
-    }
-
 
 }
