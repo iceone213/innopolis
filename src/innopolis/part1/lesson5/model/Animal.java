@@ -100,7 +100,7 @@ public class Animal implements Identified<UUID>, Comparable {
 
     @Override
     public int hashCode() {
-        return 29 * Objects.hash(id, name);
+        return 29 * Objects.hash(id);
     }
 
     @Override

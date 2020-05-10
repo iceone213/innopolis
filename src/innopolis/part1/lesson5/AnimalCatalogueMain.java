@@ -5,7 +5,7 @@ import innopolis.part1.lesson2.task3.Person;
 import innopolis.part1.lesson2.task3.Sex;
 import innopolis.part1.lesson2.task3.names.MaleName;
 import innopolis.part1.lesson5.dao.AnimalDAO;
-import innopolis.part1.lesson5.dao.list.AnimalDAOImpl;
+import innopolis.part1.lesson5.dao.map.AnimalDAOImpl;
 import innopolis.part1.lesson5.model.Animal;
 
 /**
@@ -61,7 +61,7 @@ public class AnimalCatalogueMain {
         animalDAO.update(animal.getId(), animal);
 
         //Вывыодим отсортированный каталог
-        Logger.p("\nОтсортированная каталог животных:");
+        Logger.p("\nОтсортированный каталог животных:");
         animalDAO.printAll();
 
     }

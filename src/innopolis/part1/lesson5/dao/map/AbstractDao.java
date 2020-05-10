@@ -1,4 +1,4 @@
-package innopolis.part1.lesson5.dao.list;
+package innopolis.part1.lesson5.dao.map;
 
 import innopolis.part1.lesson5.dao.GenericDAO;
 import innopolis.part1.lesson5.exception.PersistException;
