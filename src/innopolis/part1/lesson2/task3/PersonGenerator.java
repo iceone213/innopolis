@@ -5,8 +5,6 @@ import innopolis.part1.lesson2.task2.Utils;
 import innopolis.part1.lesson2.task3.names.FemaleName;
 import innopolis.part1.lesson2.task3.names.MaleName;
 
-import java.util.Random;
-
 /**
  * PersonGenerator
  *
@@ -39,13 +37,13 @@ public class PersonGenerator {
      */
     public Person[] generateRandomPersonArr() {
         for (int i = 0; i < personArr.length; i++) {
-            int randomSex = Utils.getRandomNumberInRange(MIN_SEX, MAX_SEX);
-            int randomAge = Utils.getRandomNumberInRange(MIN_AGE, MAX_AGE);
+            int randomSex = Utils.randomInt(MIN_SEX, MAX_SEX);
+            int randomAge = Utils.randomInt(MIN_AGE, MAX_AGE);
 
             int randomName;
 
             if (Sex.values()[randomSex] == Sex.MAN) {
-                randomName = Utils.getRandomNumberInRange(MIN_MALE_NAME, MAX_MALE_NAME);
+                randomName = Utils.randomInt(MIN_MALE_NAME, MAX_MALE_NAME);
 
                 personArr[i] = new Person(
                         MaleName.values()[randomName].name(),
@@ -54,7 +52,7 @@ public class PersonGenerator {
                 );
 
             } else {
-                randomName = Utils.getRandomNumberInRange(MIN_FEMALE_NAME, MAX_FEMALE_NAME);
+                randomName = Utils.randomInt(MIN_FEMALE_NAME, MAX_FEMALE_NAME);
 
                 personArr[i] = new Person(
                         FemaleName.values()[randomName].name(),

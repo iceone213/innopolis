@@ -1,8 +1,5 @@
 package innopolis.part1.lesson2.task2;
 
-import javax.rmi.CORBA.Util;
-import java.util.Random;
-
 /**
  * RandomNumbersGenerator
  *
@@ -32,7 +29,7 @@ public class RandomNumbersGenerator {
      */
     public void generateNewRandomNumbersArr() {
         for (int i = 0; i < randomNumbersArr.length; i++) {
-            randomNumbersArr[i] = Utils.getRandomNumberInRange(nminValue, nmaxValue);
+            randomNumbersArr[i] = Utils.randomInt(nminValue, nmaxValue);
         }
 
         Logger.p("Generated new randomNumbersArr");
