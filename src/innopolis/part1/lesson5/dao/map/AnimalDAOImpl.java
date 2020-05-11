@@ -45,6 +45,7 @@ public class AnimalDAOImpl extends AbstractDao<Animal, UUID> implements AnimalDA
         //сначала сортируем Map по имени
         sortElementsByName();
 
+        //бинарный поиск
         Animal searchResult = AnimalSearch.getInstance().searchByName(elements.values(), name);
 
         if (searchResult != null) {
@@ -60,25 +61,22 @@ public class AnimalDAOImpl extends AbstractDao<Animal, UUID> implements AnimalDA
     }
 
     public void sortElements() {
-        LinkedHashMap<UUID, Animal> sortedMap = new LinkedHashMap<UUID, Animal>();
+        Map<UUID, Animal> sortedMap = new LinkedHashMap<>();
 
         elements.entrySet().stream()
-                .sorted(new Comparator<Map.Entry<UUID, Animal>>() {
-                    @Override
-                    public int compare(Map.Entry<UUID, Animal> o1, Map.Entry<UUID, Animal> o2) {
-                        int compareOwner = o1.getValue().getOwner().compareTo(o2.getValue().getOwner());
-                        int compareName = o1.getValue().getName().compareTo(o2.getValue().getName());
-                        int compareWeight = o1.getValue().getWeight().compareTo(o2.getValue().getWeight());
+                .sorted((o1, o2) -> {
+                    int compareOwner = o1.getValue().getOwner().compareTo(o2.getValue().getOwner());
+                    int compareName = o1.getValue().getName().compareTo(o2.getValue().getName());
+                    int compareWeight = o1.getValue().getWeight().compareTo(o2.getValue().getWeight());
 
-                        if (compareOwner == 0) {
-                            if (compareName == 0) {
-                                //descending order
-                                return -compareWeight;
-                            }
-                            return compareName;
+                    if (compareOwner == 0) {
+                        if (compareName == 0) {
+                            //descending order
+                            return -compareWeight;
                         }
-                        return compareOwner;
+                        return compareName;
                     }
+                    return compareOwner;
                 }).forEach(e -> sortedMap.put(e.getValue().getId(), e.getValue()));
 
         elements.clear();
@@ -86,15 +84,11 @@ public class AnimalDAOImpl extends AbstractDao<Animal, UUID> implements AnimalDA
     }
 
     public void sortElementsByName() {
-        LinkedHashMap<UUID, Animal> sortedMap = new LinkedHashMap<UUID, Animal>();
+        Map<UUID, Animal> sortedMap = new LinkedHashMap<>();
 
         elements.entrySet().stream()
-                .sorted(new Comparator<Map.Entry<UUID, Animal>>() {
-                    @Override
-                    public int compare(Map.Entry<UUID, Animal> o1, Map.Entry<UUID, Animal> o2) {
-                        return o1.getValue().getName().compareTo(o2.getValue().getName());
-                    }
-                }).forEach(e -> sortedMap.put(e.getValue().getId(), e.getValue()));
+                .sorted(Comparator.comparing(o -> o.getValue().getName())
+                ).forEach(e -> sortedMap.put(e.getValue().getId(), e.getValue()));
 
         elements.clear();
         elements.putAll(sortedMap);
