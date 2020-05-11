@@ -11,12 +11,19 @@ import java.io.IOException;
  * @author Stanislav_Klevtsov
  */
 public class Main {
+
+    private static final String fileName = "note.txt";
+
     public static void main(String[] args) throws IOException {
-        readFile(".\\res\\note.txt");
+
+        String localFileName = Const.RES_FILE_PATH + fileName;
+        System.out.println(localFileName);
+
+        readFile(Const.RES_FILE_PATH + fileName);
         String text = "File not found";
-        writeFile(".\\res\\note.txt", text);
-        readFile(".\\res\\note.txt");
-        addToFile(".\\res\\note.txt", "Hello");
+        writeFile(Const.RES_FILE_PATH + fileName, text);
+        readFile(Const.RES_FILE_PATH + fileName);
+        addToFile(Const.RES_FILE_PATH + fileName, "Hello");
     }
 
     public static void readFile(String filename) {
@@ -46,7 +53,7 @@ public class Main {
     }
 
     public static void addToFile(String fileName, String str) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream("note.txt", true)) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName, true)) {
             byte[] buffer = str.getBytes();
             fileOutputStream.write(buffer);
         } catch (FileNotFoundException e) {
