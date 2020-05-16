@@ -47,6 +47,23 @@ public class FileGenerator {
         Logger.p(String.format("Generated %s files", n));
     }
 
+    public String randomWord() {
+        StringBuilder sb = new StringBuilder();
+
+        int wordLength = Utils.randomInt(1, MAX_WORD_LENGTH);
+
+        for (int j = 0; j < wordLength; j++) {
+            char randomChar = ALPHABET.charAt( Utils.randomInt(0, wordLength) );
+
+            sb.append(randomChar);
+        }
+
+        char comma = ((Utils.randomFloat(0.0f, 1.0f) < 0.25f) ? ',' : '\0');
+        sb.append(comma);
+
+        return sb.toString();
+    }
+
     /**
      * Создает случайный массив слов.
      *
