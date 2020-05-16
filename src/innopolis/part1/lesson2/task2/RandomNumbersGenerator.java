@@ -27,13 +27,17 @@ public class RandomNumbersGenerator {
     /**
      * Generates new randomNumbersArr
      */
-    public void generateNewRandomNumbersArr() {
+    public Integer[] generateNewRandomNumbersArr() {
+        randomNumbersArr = new Integer[n];
+
         for (int i = 0; i < randomNumbersArr.length; i++) {
             randomNumbersArr[i] = Utils.randomInt(nminValue, nmaxValue);
         }
 
         Logger.p("Generated new randomNumbersArr");
         Logger.d(randomNumbersArr);
+
+        return randomNumbersArr;
     }
 
     /**
