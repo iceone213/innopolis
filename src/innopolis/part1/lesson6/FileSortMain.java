@@ -18,7 +18,7 @@ public class FileSortMain {
         FileGenerator generator = new FileGenerator();
         String[] words = generator.randomWordArr(100);
 
-        generator.getFiles(Const.RES_FILE_PATH, 10, 100, words, 1);
+        generator.getFiles(Const.RES_FILE_PATH, 10, 10000, words, 0.75f);
     }
 
 
