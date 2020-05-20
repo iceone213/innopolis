@@ -31,6 +31,24 @@ public class Utils {
     }
 
     /**
+     * Генерирует случайный массив целых чисел.
+     *
+     * @param count Кол-во чисел в массиве.
+     * @param minValue Минимальное возможное число.
+     * @param maxValue Максимально возможное число
+     * @return Массив случайных чисел.
+     */
+    public static Integer[] generateRandomIntArr(int count, int minValue, int maxValue) {
+        Integer[] randomIntArr = new Integer[count];
+
+        for (int i = 0; i < randomIntArr.length; i++) {
+            randomIntArr[i] = Utils.randomInt(minValue, maxValue);
+        }
+
+        return randomIntArr;
+    }
+
+    /**
      * Generates a random integer between min (inclusive) and max (inclusive).
      *
      * @param min min value bound

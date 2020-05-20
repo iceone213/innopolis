@@ -67,11 +67,13 @@ public class Logger {
      */
     static void printArray(Object[] objects) {
         if (objects != null && objects.length > 0) {
+            System.out.print("{");
             for(int i=0; i < objects.length; i++) {
-                System.out.print(objects[i].toString() + "\n");
+                if (i!=0) System.out.print(",");
+                System.out.print(objects[i].toString());
             }
 
-            p("");
+            System.out.println("}");
             return;
         }
 
