@@ -2,11 +2,10 @@ package innopolis.part1.lesson8.task1;
 
 import innopolis.part1.lesson6.Const;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * SerializeWorker
@@ -15,59 +14,81 @@ import java.lang.reflect.Field;
  */
 public class SerializeWorker implements Serialize {
 
-
+    /**
+     * Сериализует объект в файл
+     *
+     * @param obj Объект для сериализации
+     * @param file Файл для записи сериализованного объекта
+     */
     @Override
-    public void serialize(Object obj, String file) throws IllegalAccessException, NoSuchFieldException {
+    public void serialize(Object obj, String file) {
 
-        obj.getClass().getDeclaredField("type");
+        Class<?> objectClass = obj.getClass();
 
+        Field[] fields = objectClass.getDeclaredFields(); // Поля объекта
 
-        Field[] fields = obj.getClass().getDeclaredFields();
-        for (Field declaredField : fields) {
-
-            declaredField.getModifiers();
-            String type = declaredField.getType().getSimpleName();
-            declaredField.getName();
-
-            declaredField.setAccessible(true); // доступ к приватному полю
-            Object fldValue = declaredField.get(obj);
-
-            try {
-
-                DataOutputStream dos = new DataOutputStream(
-                        new FileOutputStream(   Const.RES_FILE_PATH + "obj.bin"));
-
-                ObjectOutputStream oos = new ObjectOutputStream(
-                        new FileOutputStream(Const.RES_FILE_PATH + "obj.bin"));
-
-                switch (type) {
-                    case "String":
-                        dos.writeUTF((String) fldValue); break;
-                    case "int": dos.writeInt((int) fldValue); break;
-                    case "short": dos.writeShort((short) fldValue); break;
-                    case "byte": dos.writeByte((byte) fldValue); break;
-                    case "long": dos.writeLong((long) fldValue); break;
-                    case "float": dos.writeFloat((float) fldValue); break;
-                    case "double": dos.writeDouble((double) fldValue); break;
-                    default:
-                        oos.writeObject(fldValue);
-                }
-
-                System.out.println("Done!");
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(file));){
+            stream.writeUTF(objectClass.getName()); // Записываем имя класса
+            // Записываем значения всех полей
+            for (int i = 0; i < fields.length; i++) {
+                fields[i].setAccessible(true);
+                stream.writeObject(fields[i].get(obj));
             }
 
 
-
-
-            System.out.println();
+        } catch (IOException | IllegalAccessException e){
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Выполняет десериализацию объекта из файла
+     *
+     * @param file Файл для десериализации
+     * @return Объект
+     */
     @Override
     public Object deSerialize(String file) {
-        return null;
+        Object o = null;
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));){
+            // Читаем имя класса
+            String className = in.readUTF();
+
+            Class clazz = Class.forName(className); // Класс объекта
+            Constructor[] cons = clazz.getConstructors(); // Конструкторы объекта
+            Class[] params = cons[0].getParameterTypes(); // Параметры конструктора, перем первый возможный
+
+            Object[] args = new Object[params.length];
+            for (int i = 0; i < params.length; i++) {
+
+                if(params[i].isPrimitive()) {
+                    String name = params[i].getName();
+                    switch (name){
+                        case "boolean":
+                            args[i] = false;
+                            break;
+                        default:
+                            args[i] = 0;
+                            break;
+                    }
+                } else {
+                    args[i] = null;
+                }
+
+            }
+
+            o = clazz.getConstructor(params).newInstance(args); // Создаем новый объект с полями по умолчанию
+
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                field.set(o,in.readObject());
+            }
+
+        } catch (IOException | ClassNotFoundException | NoSuchMethodException |
+                InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }
