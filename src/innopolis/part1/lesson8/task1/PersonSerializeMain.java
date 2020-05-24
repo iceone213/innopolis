@@ -19,8 +19,8 @@ public class PersonSerializeMain {
 
     public static void main(String[] args) {
         Logger.p("Создаем объект Person:");
-        Person p = new Person("Alex", 25, Sex.MAN);
-        Logger.p(p.toString());
+        Person alex = new Person("Alex", 25, Sex.MAN);
+        Logger.p(alex.toString());
 
         Path file = Paths.get(Const.RES_FILE_PATH + "person.bin");
 
@@ -33,12 +33,13 @@ public class PersonSerializeMain {
         }
 
         Logger.p("\nИнициализируем SerializeWorker..");
-        SerializeWorker sw = new SerializeWorker();
-        sw.serialize(p ,file.toString());
+        Serialize sw = new SimpleSerializeWorker();
+        sw.serialize(alex ,file.toString());
         Logger.p("Сериализуем объект типа Person в файл " + file.toString());
 
         Logger.p("Десериализуем объект из файла " + file.toString());
-        Logger.p(((Person) sw.deSerialize(file.toString())).toString());
+        Person person = (Person) sw.deSerialize(file.toString());
+        Logger.p(person.toString());
 
     }
 }

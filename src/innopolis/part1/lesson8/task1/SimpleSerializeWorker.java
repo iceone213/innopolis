@@ -1,7 +1,5 @@
 package innopolis.part1.lesson8.task1;
 
-import innopolis.part1.lesson6.Const;
-
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -12,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Stanislav_Klevtsov
  */
-public class SerializeWorker implements Serialize {
+public class SimpleSerializeWorker implements Serialize {
 
     /**
      * Сериализует объект в файл
@@ -56,7 +54,7 @@ public class SerializeWorker implements Serialize {
 
             Class clazz = Class.forName(className); // Класс объекта
             Constructor[] cons = clazz.getConstructors(); // Конструкторы объекта
-            Class[] params = cons[0].getParameterTypes(); // Параметры конструктора, перем первый возможный
+            Class[] params = cons[0].getParameterTypes(); // Параметры конструктора, берем первый возможный
 
             Object[] args = new Object[params.length];
             for (int i = 0; i < params.length; i++) {

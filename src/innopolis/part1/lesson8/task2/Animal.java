@@ -1,36 +1,34 @@
-package innopolis.part1.lesson5.model;
+package innopolis.part1.lesson8.task2;
 
 import innopolis.part1.lesson2.task3.Person;
+
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 /**
- * Animal
- * Представление сущности домашнего животного.
+ * AnimalPet
  *
  * @author Stanislav_Klevtsov
  */
-public class Animal implements Identified<UUID>, Comparable {
+public class Animal {
 
-    private final UUID id;
+    private final Long id;
     private String name;
     private Integer weight;
     private Person owner;
 
     public Animal(String name, Person owner, Integer weight) {
-        this.id  = UUID.randomUUID();
+        this.id = UUID.randomUUID().getMostSignificantBits();
         this.name = name;
         this.owner = owner;
         this.weight = weight;
     }
 
     public Animal() {
-        this.id  = UUID.randomUUID();
+        this.id = UUID.randomUUID().getMostSignificantBits();
     }
 
-    @Override
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -115,8 +113,8 @@ public class Animal implements Identified<UUID>, Comparable {
                 '}';
     }
 
-    @Override
     public int compareTo(Object o) {
         return 0;
     }
+
 }
