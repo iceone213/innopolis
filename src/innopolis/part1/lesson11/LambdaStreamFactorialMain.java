@@ -1,11 +1,11 @@
 package innopolis.part1.lesson11;
 
 import innopolis.part1.lesson2.task2.Logger;
-import innopolis.part1.lesson2.task2.Utils;
 
 import java.math.BigInteger;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * LambdaStreamMain
