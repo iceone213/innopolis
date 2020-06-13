@@ -13,17 +13,16 @@ import java.sql.Statement;
 public class DBManager {
     /**
      * Сброс и инициализация БД
-     * @param connection соединение с БД
+     * @param db соединение с БД
      */
-    public static void renewDataBase(Connection connection){
+    public static void renewDataBase(Connection db){
         Savepoint first = null;
         Statement statement = null;
         try{
-            statement = connection.createStatement();
-            connection.setAutoCommit(false);//ручное управление
+            statement = db.createStatement();
+            db.setAutoCommit(false); // Ручное управление
 
-            //добавляем операции в батч
-//            statement.addBatch("USE social_net");
+            // Добавляем операции в батч
             statement.addBatch("DROP TABLE IF EXISTS users, messages, ads");
             statement.addBatch("CREATE TABLE users\n" +
                     "(id bigserial primary key,\n" +
@@ -36,7 +35,7 @@ public class DBManager {
                     "('Alex','hackinganyway'), \n" +
                     "('Bruce','123');");
 
-            first = connection.setSavepoint("first"); // Savepoint после создания первой таблицы
+            first = db.setSavepoint("first"); // Savepoint после создания первой таблицы
 
             statement.addBatch("CREATE TABLE ads\n" +
                     "(id bigserial primary key,\n" +
@@ -64,15 +63,14 @@ public class DBManager {
                     "('Some long msg', 2, 1, 1), \n" +
                     "('Hello World!', 1, 3, 2);");
 
-
             statement.executeBatch();
-            connection.commit(); // Ручное управление
-        }catch (SQLException e){
+            db.commit(); // Ручное управление
+        } catch (SQLException e){
             e.printStackTrace();
             try {
-                connection.rollback(first); // Пробуем откатить к точке сохранения
+                db.rollback(first); // Пробуем откатить к точке сохранения
                 statement.executeBatch();
-                connection.commit();
+                db.commit();
             } catch (SQLException e1){
                 e1.printStackTrace();
             }

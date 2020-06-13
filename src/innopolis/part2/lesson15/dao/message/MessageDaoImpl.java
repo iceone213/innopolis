@@ -20,14 +20,13 @@ public class MessageDaoImpl implements MessageDao {
     public Long addMessage(Message message) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO messages values (DEFAULT, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setLong(1, message.getId());
-            preparedStatement.setString(2, message.getText());
-            preparedStatement.setLong(3, message.getSenderId());
-            preparedStatement.setLong(4, message.getRecipientId());
-            preparedStatement.setLong(5, message.getAdId());
+                     "INSERT INTO messages values (DEFAULT, ?, ?, ?, ?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, message.getText());
+            preparedStatement.setLong(2, message.getSenderId());
+            preparedStatement.setLong(3, message.getRecipientId());
+            preparedStatement.setLong(4, message.getAdId());
             preparedStatement.executeUpdate();
-
 
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -35,7 +34,7 @@ public class MessageDaoImpl implements MessageDao {
                 }
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0L;
@@ -57,7 +56,7 @@ public class MessageDaoImpl implements MessageDao {
                             resultSet.getLong(5));
                 }
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -76,20 +75,20 @@ public class MessageDaoImpl implements MessageDao {
             preparedStatement.setLong(5, message.getId());
             preparedStatement.executeUpdate();
             return true;
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteMessageById(Long id) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "DELETE FROM messages WHERE id=?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

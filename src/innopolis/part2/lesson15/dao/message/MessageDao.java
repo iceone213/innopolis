@@ -1,6 +1,5 @@
 package innopolis.part2.lesson15.dao.message;
 
-import innopolis.part2.lesson15.model.Ad;
 import innopolis.part2.lesson15.model.Message;
 
 public interface MessageDao {
@@ -10,5 +9,5 @@ public interface MessageDao {
 
     boolean updateMessageById(Message message);
 
-    boolean deleteById(Long id);
+    boolean deleteMessageById(Long id);
 }

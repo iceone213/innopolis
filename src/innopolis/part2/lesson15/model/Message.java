@@ -6,6 +6,7 @@ package innopolis.part2.lesson15.model;
  * @author Stanislav_Klevtsov
  */
 public class Message {
+
     private Long id;
     private String text;
     private Long senderId;

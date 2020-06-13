@@ -3,7 +3,6 @@ package innopolis.part2.lesson15.dao.ad;
 import innopolis.part2.lesson15.connection.ConnectionManager;
 import innopolis.part2.lesson15.connection.ConnectionManagerJdbcImpl;
 import innopolis.part2.lesson15.model.Ad;
-import innopolis.part2.lesson15.model.User;
 
 import java.sql.*;
 
@@ -17,16 +16,13 @@ public class AdDaoImpl implements AdDao {
     private static final ConnectionManager connectionManager =
             ConnectionManagerJdbcImpl.getInstance();
 
-
     @Override
     public Long addAd(Ad ad) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO ads values (DEFAULT, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setLong(1, ad.getId());
-            preparedStatement.setString(2, ad.getAdText());
+                     "INSERT INTO ads values (DEFAULT, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, ad.getAdText());
             preparedStatement.executeUpdate();
-
 
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -34,7 +30,7 @@ public class AdDaoImpl implements AdDao {
                 }
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0L;
@@ -53,7 +49,7 @@ public class AdDaoImpl implements AdDao {
                             resultSet.getString(2));
                 }
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -69,7 +65,7 @@ public class AdDaoImpl implements AdDao {
             preparedStatement.setLong(2, ad.getId());
             preparedStatement.executeUpdate();
             return true;
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -82,7 +78,7 @@ public class AdDaoImpl implements AdDao {
                      "DELETE FROM ads WHERE id=?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

@@ -1,7 +1,5 @@
 package innopolis.part2.lesson15.model;
 
-import innopolis.part1.lesson2.task2.Logger;
-
 /**
  * Ad
  *

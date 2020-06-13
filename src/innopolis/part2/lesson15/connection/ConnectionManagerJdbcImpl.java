@@ -11,26 +11,25 @@ import java.sql.SQLException;
  */
 public class ConnectionManagerJdbcImpl implements ConnectionManager {
 
-    public static ConnectionManager INSTANCE;
+    public static ConnectionManager instance;
 
     private ConnectionManagerJdbcImpl() {
     }
 
     /**
-     * Возвращает единственный экземпляр ConnectionManager
+     * Возвращает единственный экземпляр ConnectionManager (singleton)
+     *
      * @return ConnectionManager
      */
     public static ConnectionManager getInstance() {
-        if (INSTANCE == null){
-            INSTANCE = new ConnectionManagerJdbcImpl();
-
+        if (instance == null) {
+            instance = new ConnectionManagerJdbcImpl();
         }
-        return INSTANCE;
+        return instance;
     }
 
     /**
-     * Метод получает соединение с сервером MySql
-     * и инициализирует работу с БД postgres
+     * Получает соединение с сервером и инициализирует работу с БД postgres
      * @return
      */
     @Override
