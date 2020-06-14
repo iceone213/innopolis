@@ -1,6 +1,8 @@
 package innopolis.part2;
 
 import innopolis.part2.lesson15.connection.ConnectionManager;
+import innopolis.part2.lesson15.connection.ConnectionManagerJdbcImpl;
+import innopolis.part2.lesson15.dao.ad.AdDao;
 import innopolis.part2.lesson15.dao.ad.AdDaoImpl;
 import innopolis.part2.lesson15.model.Ad;
 
@@ -25,7 +27,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @ExtendWith(TestResultLoggerExtension.class)
 public class DaoImplTest {
 
-    private AdDaoImpl adDaoImpl;
+    private AdDao adDao;
     private ConnectionManager connManager;
     private Connection conn;
     @Mock
@@ -37,9 +39,9 @@ public class DaoImplTest {
     @BeforeEach
     void setUp() throws SQLException {
         initMocks(this);
-        connManager = mock(ConnectionManager.class);
+        connManager = mock(ConnectionManagerJdbcImpl.class);
         conn = mock(Connection.class);
-        adDaoImpl = mock(AdDaoImpl.class);
+        adDao = mock(AdDaoImpl.class);
     }
 
     @Test
@@ -49,15 +51,15 @@ public class DaoImplTest {
         when(resultSetMock.next()).thenReturn(true);
 
         String adText = "Ad we back again with BRAND NEW AD!!";
-        Ad ad1 = new Ad(adText);
+        Ad ad1 = new Ad(5l, adText);
 
-        adDaoImpl.addAd(ad1);
+        adDao.addAd(ad1);
 
         verify(connManager, times(1)).getConnection();
         verify(conn, atMost(1)).prepareStatement(AdDaoImpl.INSERT_INTO_ADS);
-        verify(preparedStatementMock, times(1)).setString(1, ad1.getAdText());
+        verify(preparedStatementMock, times(1)).setLong(1, ad1.getId());
+        verify(preparedStatementMock, times(1)).setString(2, ad1.getAdText());
         verify(preparedStatementMock, times(1)).executeQuery();
     }
-
 
 }
