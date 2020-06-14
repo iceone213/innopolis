@@ -18,12 +18,18 @@ public class UserDaoJdbcImpl implements UserDao {
     private static final ConnectionManager connectionManager =
             ConnectionManagerJdbcImpl.getInstance();
 
+    public static final String INSERT_INTO_USERS = "INSERT INTO users values (DEFAULT, ?, ?)";
+    public static final String SELECT_USERS_FROM_ADS = "SELECT * FROM users WHERE id = ?";
+    public static final String SELECT_FROM_USERS_WHERE_ID = "SELECT * FROM users ORDER BY id";
+    public static final String UPDATE_USERS_WHERE_ID = "UPDATE users SET login=?, password=? WHERE id=?";
+    public static final String DELETE_USERS_WHERE_ID = "DELETE FROM users WHERE id=?";
+
     @Override
     public Long addUser(User user) {
         try {
             Connection conn = connectionManager.getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "INSERT INTO users values (DEFAULT, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                    INSERT_INTO_USERS, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
@@ -49,7 +55,7 @@ public class UserDaoJdbcImpl implements UserDao {
         try {
             Connection connection = connectionManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM users WHERE id = ?");
+                    SELECT_USERS_FROM_ADS);
 
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -71,7 +77,7 @@ public class UserDaoJdbcImpl implements UserDao {
         List<User> users = new ArrayList<User>();
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM users ORDER BY id")) {
+                     SELECT_FROM_USERS_WHERE_ID)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     users.add(
@@ -93,8 +99,7 @@ public class UserDaoJdbcImpl implements UserDao {
     public boolean updateUserById(User user) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "UPDATE users SET login=?, password=? " +
-                             "WHERE id=?")) {
+                     UPDATE_USERS_WHERE_ID)) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setLong(3, user.getId());
@@ -110,7 +115,7 @@ public class UserDaoJdbcImpl implements UserDao {
     public boolean deleteUserById(Long id) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "DELETE FROM users WHERE id=?")) {
+                     DELETE_USERS_WHERE_ID)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
