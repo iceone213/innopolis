@@ -59,8 +59,8 @@ public class DBManager {
             statement.addBatch("INSERT INTO messages\n" +
                     "(text, senderId, recipientId, adId)\n" +
                     "VALUES\n" +
-                    "('Test msg', 1, 2, 1),\n" +
-                    "('Some long msg', 2, 1, 1), \n" +
+                    "('Test msg', 1, 2, 2),\n" +
+                    "('Some long msg', 2, 1, 2), \n" +
                     "('Hello World!', 1, 3, 2);");
 
             statement.executeBatch();

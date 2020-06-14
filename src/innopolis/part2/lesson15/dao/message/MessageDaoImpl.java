@@ -5,6 +5,8 @@ import innopolis.part2.lesson15.connection.ConnectionManagerJdbcImpl;
 import innopolis.part2.lesson15.model.Message;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MessageDaoImpl
@@ -63,10 +65,35 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
+    public List<Message> getMessages() {
+        List<Message> messages = new ArrayList<Message>();
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM messages ORDER BY id")) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    messages.add(
+                            new Message(
+                                    resultSet.getLong(1),
+                                    resultSet.getString(2),
+                                    resultSet.getLong(3),
+                                    resultSet.getLong(4),
+                                    resultSet.getLong(5))
+                    );
+                }
+                return messages;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public boolean updateMessageById(Message message) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "UPDATE messages SET text=?, sender=?, recipient=?, adText=? " +
+                     "UPDATE messages SET text=?, senderId=?, recipientId=?, adId=? " +
                              "WHERE id=?")) {
             preparedStatement.setString(1, message.getText());
             preparedStatement.setLong(2, message.getSenderId());

@@ -1,5 +1,7 @@
 package innopolis.part2.lesson15.model;
 
+import java.util.UUID;
+
 /**
  * Dialog
  *
@@ -7,11 +9,18 @@ package innopolis.part2.lesson15.model;
  */
 public class Message {
 
-    private Long id;
+    private Long id = UUID.randomUUID().getMostSignificantBits();
     private String text;
     private Long senderId;
     private Long recipientId;
     private Long adId;
+
+    public Message(String text, Long senderId, Long recipientId, Long adText) {
+        this.text = text;
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+        this.adId = adText;
+    }
 
     public Message(Long id, String text, Long senderId, Long recipientId, Long adText) {
         this.id = id;
@@ -68,7 +77,7 @@ public class Message {
                 ", text='" + text + '\'' +
                 ", senderId='" + senderId + '\'' +
                 ", recipientId='" + recipientId + '\'' +
-                ", adId='" + adId +
+                ", adId='" + adId + '\'' +
                 '}';
     }
 

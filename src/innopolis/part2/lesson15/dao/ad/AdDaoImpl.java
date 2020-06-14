@@ -3,8 +3,11 @@ package innopolis.part2.lesson15.dao.ad;
 import innopolis.part2.lesson15.connection.ConnectionManager;
 import innopolis.part2.lesson15.connection.ConnectionManagerJdbcImpl;
 import innopolis.part2.lesson15.model.Ad;
+import innopolis.part2.lesson15.model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AdDaoImpl
@@ -34,6 +37,29 @@ public class AdDaoImpl implements AdDao {
             e.printStackTrace();
         }
         return 0L;
+    }
+
+    @Override
+    public List<Ad> getAds() {
+        List<Ad> ads = new ArrayList<Ad>();
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM ads ORDER BY id")) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    ads.add(
+                            new Ad(
+                                    resultSet.getLong(1),
+                                    resultSet.getString(2)
+                            )
+                    );
+                }
+                return ads;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

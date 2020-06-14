@@ -71,9 +71,9 @@ public class UserDaoJdbcImpl implements UserDao {
         List<User> users = new ArrayList<User>();
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM users")) {
+                     "SELECT * FROM users ORDER BY id")) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
+                while (resultSet.next()) {
                     users.add(
                             new User(
                                     resultSet.getLong(1),
