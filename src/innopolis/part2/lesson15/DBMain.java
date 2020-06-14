@@ -1,6 +1,5 @@
 package innopolis.part2.lesson15;
 
-import innopolis.part1.lesson2.task2.Logger;
 import innopolis.part2.lesson15.connection.ConnectionManager;
 import innopolis.part2.lesson15.connection.ConnectionManagerJdbcImpl;
 import innopolis.part2.lesson15.dao.ad.AdDao;
@@ -12,9 +11,13 @@ import innopolis.part2.lesson15.dao.user.UserDaoJdbcImpl;
 import innopolis.part2.lesson15.model.Ad;
 import innopolis.part2.lesson15.model.Message;
 import innopolis.part2.lesson15.model.User;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +26,10 @@ import java.util.List;
  * @author Stanislav_Klevtsov
  */
 public class DBMain {
+    private static final Logger sysLog = LogManager.getLogger();
+    private static final Logger secLog = LogManager.getLogger("SecLog");
+    private static final Logger bsLog = LogManager.getLogger("BsLog");
+
     private static final ConnectionManager connectionManager =
             ConnectionManagerJdbcImpl.getInstance();
 
@@ -37,16 +44,15 @@ public class DBMain {
 
             DBManager.renewDataBase(connection); // Сброс и инициализация БД
 
-            Logger.p("Welcome to Social_Net!");
-            Logger.p("-----------------------------------------------------");
+            sysLog.log(Level.DEBUG, "New Social_Net started at - {}", new Date(System.currentTimeMillis()));
 
             testUserDaoImpl();
             testAdDaoImpl();
             testMessageDaoImpl();
-            printAllTables();
-
+//            printAllTables();
 
         } catch (SQLException e) {
+            sysLog.log(Level.ERROR, e);
             e.printStackTrace();
         }
     }
@@ -57,59 +63,53 @@ public class DBMain {
      * @throws SQLException
      */
     private static void testUserDaoImpl() throws SQLException {
-        Logger.p("User registration module");
-        Logger.p("-");
+
+        sysLog.log(Level.DEBUG, "User registration module started");
 
         // Поиск по id
         User user = userDao.getUserById(1L);
-        Logger.p("Getting profile for user with id = 1: " + user);
+        sysLog.log(Level.DEBUG,"Getting profile for user with id = 1: {}", user);
 
         // Добавление нового юзера
         Long uid1 = userDao.addUser(new User("Stas", "333"));
-        Logger.p("New registration user with id: " + uid1);
+        sysLog.log(Level.DEBUG, "New registration user with id: {}", uid1);
         Long uid2 = userDao.addUser(new User("User", "111"));
-        Logger.p("New registration user with id: " + uid2);
+        sysLog.log(Level.DEBUG, "New registration user with id: {}", uid2);
 
         // Удаление по id
         userDao.deleteUserById(uid2);
-        Logger.p("Successfully deleted user with id = " + uid2);
+        secLog.log(Level.DEBUG, "Successfully deleted user with id = {}", uid2);
 
         // Обновление данных по логину
         userDao.updateUserById(new User(1L, "SomeGuy", "StrongPassword2020"));
-
-        Logger.p("User id=1 updated profile: " + userDao.getUserById(1L));
-
-        Logger.p("-----------------------------------------------------");
+        sysLog.log(Level.DEBUG, "User id=1 updated profile: {}", userDao.getUserById(1L));
     }
 
     /**
      * Проверка CRUD-операций с рекламой
      */
     private static void testAdDaoImpl() {
-        Logger.p("Advertisement module");
-        Logger.p("-");
+        sysLog.log(Level.DEBUG, "Advertisement module started");
 
         // Получение рекламы по id
         Ad ad1 = adDao.getAdById(1l);
-        Logger.p("Getting ad with id=1: " + ad1);
+        sysLog.log(Level.DEBUG, "Getting ad with id=1: {}", ad1);
 
         // Добавление новой рекламы в БД
         Ad ad2 = new Ad("Our new prices are awesome!");
         Long id = adDao.addAd(ad2);
         ad2.setId(id);
-        Logger.p("Added new ad with id = " + id);
+        sysLog.log(Level.DEBUG, "Added new ad with id = {}", id);
 
         // Удаление рекламы по id
         adDao.deleteAdById(1l);
-        Logger.p("Successfully deleted ad with id = 1");
+        secLog.log(Level.DEBUG, "Successfully deleted ad with id = 1");
 
         // Изменение рекламы (меняем текст)
         ad2.setAdText("Boring ad...");
         adDao.updateAdById(ad2);
-        Logger.p("Successfully updated ad with id = " + ad2.getId());
-        Logger.p("Getting updated ad with id = " + ad2.getId() + ":" + adDao.getAdById(ad2.getId()));
-
-        Logger.p("-----------------------------------------------------");
+        sysLog.log(Level.DEBUG, "Successfully updated ad with id = {}", ad2.getId());
+        sysLog.log(Level.DEBUG, "Getting updated ad with id = {}", ad2.getId());
 
     }
 
@@ -117,12 +117,11 @@ public class DBMain {
      * Проверка CRUD-операций с сообщениями
      */
     private static void testMessageDaoImpl() {
-        Logger.p("Messages module");
-        Logger.p("-");
+        sysLog.log(Level.DEBUG, "Messages module started");
 
         // Получение сообщения по id
         Message msg1 = messageDao.getMessageById(1l);
-        Logger.p(
+        sysLog.log(Level.DEBUG,
                 userDao.getUserById(msg1.getSenderId()).getLogin() +
                         " sent msg to " + userDao.getUserById(msg1.getRecipientId()).getLogin() +
                         " : \"" + msg1.getText() + "\"" +
@@ -139,7 +138,7 @@ public class DBMain {
 
         Long id = messageDao.addMessage(msg2);
         msg2.setId(id);
-        Logger.p(
+        sysLog.log(Level.DEBUG,
                 userDao.getUserById(msg2.getSenderId()).getLogin() +
                         " sent msg to " + userDao.getUserById(msg2.getRecipientId()).getLogin() +
                         " : \"" + msg2.getText() + "\"" +
@@ -148,50 +147,47 @@ public class DBMain {
 
         // Удаление сообщения по id
         messageDao.deleteMessageById(1l);
-        System.out.println("Successfully deleted msg with id = 1");
+        secLog.log(Level.DEBUG, "Successfully deleted msg with id = 1");
 
         // Редактирование сообщения (меняем текст)
-        msg2.setText("Soo tired of this ad...");
+        msg2.setText("So tired of this ad...");
+        msg2.setAdId(3l);
         messageDao.updateMessageById(msg2);
-        Logger.p("Changing the ad for msg with id = " + msg2.getId());
-        Logger.p(
+        bsLog.log(Level.DEBUG, "Changing the ad for msg with id = {}", msg2.getId());
+        sysLog.log(Level.DEBUG,
                 userDao.getUserById(msg2.getSenderId()).getLogin() +
                         " sent msg to " + userDao.getUserById(msg2.getRecipientId()).getLogin() +
                         " : \"" + msg2.getText() + "\"" +
                         " (Ad: " + adDao.getAdById(msg2.getAdId()).getAdText() + ")"
         );
-
-        Logger.p("-----------------------------------------------------");
-
     }
 
     public static void printAllTables() {
-        Logger.p("DB");
-        Logger.p("-");
+        sysLog.log(Level.DEBUG, "DB");
 
-        Logger.p("Messages table:");
+        sysLog.log(Level.DEBUG, "Messages table:");
         List<Message> messages = messageDao.getMessages();
 
         for (Message m : messages) {
-            Logger.p(m);
+            sysLog.log(Level.DEBUG, m);
         }
 
-        Logger.p("-");
+        sysLog.log(Level.DEBUG, "-");
 
-        Logger.p("Ads table:");
+        sysLog.log(Level.DEBUG, "Ads table:");
         List<Ad> ads = adDao.getAds();
 
         for (Ad ad : ads) {
-            Logger.p(ad);
+            sysLog.log(Level.DEBUG, ad);
         }
 
-        Logger.p("-");
+        sysLog.log(Level.DEBUG, "-");
 
-        Logger.p("Users table:");
+        sysLog.log(Level.DEBUG, "Users table:");
         List<User> users = userDao.getUsers();
 
         for (User u : users) {
-            Logger.p(u);
+            sysLog.log(Level.DEBUG, u);
         }
 
     }
