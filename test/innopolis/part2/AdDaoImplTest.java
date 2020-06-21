@@ -11,11 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -25,7 +23,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
  * @author Stanislav_Klevtsov
  */
 @ExtendWith(TestResultLoggerExtension.class)
-public class DaoImplTest {
+public class AdDaoImplTest {
 
     private AdDao adDao;
     private ConnectionManager connManager;
@@ -41,25 +39,34 @@ public class DaoImplTest {
         initMocks(this);
         connManager = mock(ConnectionManagerJdbcImpl.class);
         conn = mock(Connection.class);
-        adDao = mock(AdDaoImpl.class);
+        adDao = new AdDaoImpl();
     }
 
     @Test
     void addAd() throws SQLException {
         when(connManager.getConnection()).thenReturn(conn);
-        doReturn(preparedStatementMock).when(conn).prepareStatement(AdDaoImpl.INSERT_INTO_ADS);
+        doReturn(preparedStatementMock)
+                .when(conn)
+                .prepareStatement(AdDaoImpl.INSERT_INTO_ADS, Statement.RETURN_GENERATED_KEYS);
+        preparedStatementMock.execute();
+        doReturn(resultSetMock).when(preparedStatementMock).getGeneratedKeys();
         when(resultSetMock.next()).thenReturn(true);
 
+        Long id = 5l;
         String adText = "Ad we back again with BRAND NEW AD!!";
-        Ad ad1 = new Ad(5l, adText);
+        Ad ad1 = new Ad(5L, adText);
 
-        adDao.addAd(ad1);
+        Long result = adDao.addAd(ad1);
 
         verify(connManager, times(1)).getConnection();
-        verify(conn, atMost(1)).prepareStatement(AdDaoImpl.INSERT_INTO_ADS);
-        verify(preparedStatementMock, times(1)).setLong(1, ad1.getId());
-        verify(preparedStatementMock, times(1)).setString(2, ad1.getAdText());
-        verify(preparedStatementMock, times(1)).executeQuery();
+        verify(conn, times(1)).prepareStatement(AdDaoImpl.INSERT_INTO_ADS);
+//        verify(preparedStatementMock, times(1)).setString(1, ad1.getAdText());
+//        verify(preparedStatementMock, times(1)).executeQuery();
+//        assertAll(
+//                () -> assertEquals(5l, result),
+//                () -> assertNotEquals(5l, result)
+//
+//        );
     }
 
 }
